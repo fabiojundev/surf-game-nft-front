@@ -63,7 +63,7 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
             * Atualiza o hp do boss e do player
             */
             setBoss((prevState) => {
-                setAttackDamage( prevState?.waves - bossHp);
+                setAttackDamage(prevState?.waves - bossHp);
                 return { ...prevState, waves: bossHp };
             });
 
@@ -130,7 +130,7 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
                             <div className="image-content">
                                 <h2>{characterNFT.name}</h2>
                                 <img
-                                    src={characterNFT.imageURI}
+                                    src={`https://cloudflare-ipfs.com/ipfs/${characterNFT.imageURI}`}
                                     alt={`Character ${characterNFT.name}`}
                                 />
                                 <div className="health-bar">
