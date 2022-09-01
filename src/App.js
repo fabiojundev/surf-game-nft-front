@@ -6,6 +6,7 @@ import { CONTRACT_ADDRESS, transformCharacterData } from "./constants";
 import { ethers } from "ethers";
 import mySurfGame from "./utils/MySurfGame.json";
 import Arena from './Components/Arena';
+import LoadingIndicator from "./Components/LoadingIndicator";
 
 // Constants
 const TWITTER_HANDLE = "web3dev_"
@@ -15,12 +16,17 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [characterNFT, setCharacterNFT] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const checkIfWalletIsConnected = async () => {
+    setIsLoading(true);
+
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
         console.log("Eu acho que você não tem a metamask!");
+        setIsLoading(false);
         return;
       } else {
         console.log("Nós temos o objeto ethereum", ethereum);
@@ -43,16 +49,22 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
+
+    setIsLoading(false);
   };
 
   const renderContent = () => {
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
+
     // User does not have a connected account
     if (!currentAccount) {
       return (
         <div className="connect-wallet-container">
           <video autoPlay loop muted controls width="550" height="550">
-            <source 
-              src="https://thumbs.gfycat.com/LankyPotableAiredale-mobile.mp4" 
+            <source
+              src="https://thumbs.gfycat.com/LankyPotableAiredale-mobile.mp4"
               type="video/mp4"
             />
           </video>
@@ -104,17 +116,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const checkNetwork = async () => {
-      try {
-        if (window.ethereum.networkVersion !== "80001") {
-          alert("Please connect to Mumbai Polygon!");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
     checkIfWalletIsConnected();
-    checkNetwork();
   }, []);
 
   useEffect(() => {
@@ -137,13 +139,26 @@ const App = () => {
       } else {
         console.log("Nenhum personagem NFT foi encontrado");
       }
+
+      setIsLoading(false);
     };
 
     /*
      * Nós so queremos rodar isso se tivermos uma wallet conectada
      */
     if (currentAccount) {
+      const checkNetwork = async () => {
+        try {
+          if (window.ethereum.networkVersion !== "80001") {
+            alert("Please connect to Mumbai Polygon!");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
       console.log("Conta Atual:", currentAccount);
+      checkNetwork();
       fetchNFTMetadata();
     }
   }, [currentAccount]);

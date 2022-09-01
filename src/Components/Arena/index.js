@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { CONTRACT_ADDRESS, transformCharacterData, transformBossData } from "../../constants";
+import { CONTRACT_ADDRESS, transformBossData } from "../../constants";
 import mySurfGame from "../../utils/MySurfGame.json";
 import "./Arena.css";
+import LoadingIndicator from "../LoadingIndicator";
 
 const Arena = ({ characterNFT, setCharacterNFT }) => {
     const [gameContract, setGameContract] = useState(null);
@@ -100,6 +101,12 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
                             {`🌊 Surfar ${boss.name} 🌊`}
                         </button>
                     </div>
+                    {attackState === "surfing" && (
+                        <div className="loading-indicator">
+                            <LoadingIndicator />
+                            <p>Atacando ⚔️</p>
+                        </div>
+                    )}
                 </div>
             )}
             {characterNFT && (
