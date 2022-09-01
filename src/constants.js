@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0xd97d4Cf8d57708434cC5F0EE6549d212623182f8";
+const CONTRACT_ADDRESS = "0xe5fE73e9E91c63110ef7F8729846eb2F08679034";
 
 const transformCharacterData = (characterData) => {
     return {
@@ -9,6 +9,8 @@ const transformCharacterData = (characterData) => {
         maneuver: characterData.maneuver.toNumber(),
         tubeRiding: characterData.tubeRiding.toNumber(),
         aerial: characterData.aerial.toNumber(),
+        owner: characterData.owner.toString(),
+        score: characterData.score.toNumber(),
     };
 };
 

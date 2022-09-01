@@ -5,7 +5,7 @@ import { CONTRACT_ADDRESS, transformCharacterData } from "../../constants";
 import mySurfGame from "../../utils/MySurfGame.json";
 import LoadingIndicator from "../LoadingIndicator";
 
-const SelectCharacter = ({ setCharacterNFT }) => {
+const SelectCharacter = ({ setCharacterNFT, setAllSurfersNFTs }) => {
     const [characters, setCharacters] = useState([]);
     const [gameContract, setGameContract] = useState(null);
 
@@ -73,10 +73,13 @@ const SelectCharacter = ({ setCharacterNFT }) => {
             if (gameContract) {
                 const characterNFT = await gameContract.checkIfUserHasNFT();
                 console.log("CharacterNFT: ", characterNFT);
-                setCharacterNFT(transformCharacterData(characterNFT));
+                const newSurfer = transformCharacterData(characterNFT);
+                setCharacterNFT(newSurfer);
+                setAllSurfersNFTs( prev => [...prev, newSurfer]);
 
+                const url = `https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`;
                 alert(
-                    `Seu NFT está pronto -- veja aqui: https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+                    `Seu NFT está pronto -- veja aqui: ${url} `
                 );
             }
         };

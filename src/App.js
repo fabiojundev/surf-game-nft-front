@@ -15,6 +15,7 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [characterNFT, setCharacterNFT] = useState(null);
+  const [allSurfersNFTs, setAllSurfersNFTs] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,13 +79,15 @@ const App = () => {
       );
       //Allow user to mint a surfer NFT 
     } else if (currentAccount && !characterNFT) {
-      return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+      return <SelectCharacter setCharacterNFT={setCharacterNFT} setAllSurfersNFTs={setAllSurfersNFTs}/>;
     }
     // Show arena for users with NFT
     else if (currentAccount && characterNFT) {
       return <Arena
         characterNFT={characterNFT}
         setCharacterNFT={setCharacterNFT}
+        allSurfersNFTs={allSurfersNFTs}
+        setAllSurfersNFTs={setAllSurfersNFTs}
       />
     }
   };
@@ -138,6 +141,14 @@ const App = () => {
         setCharacterNFT(transformCharacterData(txn));
       } else {
         console.log("Nenhum personagem NFT foi encontrado");
+      }
+
+      //Get all players
+      const players = await gameContract.getAllPlayers();
+      console.log("Allplayers",players);
+      setAllSurfersNFTs(players);
+      if(players?.length) {
+        setAllSurfersNFTs(players.map( player => transformCharacterData(player)));
       }
 
       setIsLoading(false);

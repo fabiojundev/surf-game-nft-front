@@ -5,7 +5,7 @@ import mySurfGame from "../../utils/MySurfGame.json";
 import "./Arena.css";
 import LoadingIndicator from "../LoadingIndicator";
 
-const Arena = ({ characterNFT, setCharacterNFT }) => {
+const Arena = ({ characterNFT, setCharacterNFT, allSurfersNFTs, setAllSurfersNFTs }) => {
     const [gameContract, setGameContract] = useState(null);
     const [boss, setBoss] = useState(null);
     const [attackState, setAttackState] = useState("");
@@ -53,11 +53,12 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
             setBoss(transformBossData(bossTxn));
         };
 
-        const onAttackComplete = (newBossHp, newPlayerHp) => {
+        const onAttackComplete = (newBossHp, newPlayerHp, newScore) => {
             const bossHp = newBossHp.toNumber();
             const playerHp = newPlayerHp.toNumber();
+            const scored = newScore.toNumber();
 
-            console.log(`AttackComplete: Boss Hp: ${bossHp} Player Hp: ${playerHp}`);
+            console.log(`AttackComplete: Boss Hp: ${bossHp} Player Hp: ${playerHp}, score: ${scored}`);
 
             /*
             * Atualiza o hp do boss e do player
@@ -67,9 +68,14 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
                 return { ...prevState, waves: bossHp };
             });
 
+
             setCharacterNFT((prevState) => {
-                return { ...prevState, hp: playerHp };
+                return { ...prevState, hp: playerHp, score: scored };
             });
+
+            setAllSurfersNFTs(prevState => prevState.map(surfer =>
+                surfer.owner === characterNFT.owner ? { ...characterNFT, score: scored } : surfer)
+            );
 
             setShowToast(true);
             setTimeout(() => {
@@ -88,6 +94,12 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
             }
         }
     }, [gameContract]);
+
+    //Order surfers, putting the current surfer as the first one.
+    const allSurfers = [
+        characterNFT,
+        ...allSurfersNFTs.filter( surfer => characterNFT.owner !== surfer.owner)
+    ];
 
     return (
         <div className="arena-container">
@@ -117,34 +129,38 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
                     {attackState === "surfing" && (
                         <div className="loading-indicator">
                             <LoadingIndicator />
-                            <p>Atacando ⚔️</p>
+                            <p>Surfando 🌊 </p>
                         </div>
                     )}
                 </div>
             )}
-            {characterNFT && (
-                <div className="players-container">
-                    <div className="player-container">
-                        <h2>Seu Surfista</h2>
-                        <div className="player">
-                            <div className="image-content">
-                                <h2>{characterNFT.name}</h2>
-                                <img
-                                    src={`https://cloudflare-ipfs.com/ipfs/${characterNFT.imageURI}`}
-                                    alt={`Character ${characterNFT.name}`}
-                                />
-                                <div className="health-bar">
-                                    <progress value={characterNFT.hp} max={characterNFT.maxHp} />
-                                    <p>{`${characterNFT.hp} / ${characterNFT.maxHp} HP`}</p>
+            <div className="players-container">
+                {allSurfers?.map((surfer) => (
+                        <div className="player-container" key={surfer.owner}>
+                            <h2>{characterNFT.owner === surfer.owner ? 'Seu Surfista' : 'Equipe'}</h2>
+                            <div className="player">
+                                <div className="image-content">
+                                    <h2>{surfer.name}</h2>
+                                    <img
+                                        src={`https://cloudflare-ipfs.com/ipfs/${surfer.imageURI}`}
+                                        alt={`Character ${surfer.name}`}
+                                    />
+                                    <div className="health-bar">
+                                        <progress value={surfer.hp} max={surfer.maxHp} />
+                                        <p>{`${surfer.hp} / ${surfer.maxHp} HP`}</p>
+                                    </div>
+                                </div>
+                                <div className="stats">
+                                    <h4>{`🌊  Manobras: ${surfer.maneuver}, Tubos: ${surfer.tubeRiding}, Aéreos: ${surfer.aerial}`}</h4>
+                                    <h4>{`Score: ${surfer.score}`}</h4>
+                                    <h4>{`Carteira: ${surfer.owner}`}</h4>
                                 </div>
                             </div>
-                            <div className="stats">
-                                <h4>{`🌊  Manobras: ${characterNFT.maneuver}, Tubos: ${characterNFT.tubeRiding}, Aérios: ${characterNFT.aerial}`}</h4>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
+
+                    ))
+                }
+            </div>
         </div>
     );
 };
