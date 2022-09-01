@@ -8,6 +8,19 @@ const SelectCharacter = ({ setCharacterNFT }) => {
     const [characters, setCharacters] = useState([]);
     const [gameContract, setGameContract] = useState(null);
 
+    const mintCharacterNFTAction = (characterId) => async () => {
+        try {
+            if (gameContract) {
+                console.log("Mintando personagem...");
+                const mintTxn = await gameContract.mintCharacterNFT(characterId);
+                await mintTxn.wait();
+                console.log("mintTxn:", mintTxn);
+            }
+        } catch (error) {
+            console.warn("MintCharacterAction Error:", error);
+        }
+    };
+
     useEffect(() => {
         const { ethereum } = window;
 
@@ -47,9 +60,34 @@ const SelectCharacter = ({ setCharacterNFT }) => {
             }
         };
 
+        const onCharacterMint = async (sender, tokenId, characterIndex) => {
+            console.log(
+                `CharacterNFTMinted - sender: ${sender} tokenId: ${tokenId.toNumber()} characterIndex: ${characterIndex.toNumber()}`
+            );
+            if (gameContract) {
+                const characterNFT = await gameContract.checkIfUserHasNFT();
+                console.log("CharacterNFT: ", characterNFT);
+                setCharacterNFT(transformCharacterData(characterNFT));
+
+                alert(
+                    `Seu NFT está pronto -- veja aqui: https://testnets.opensea.io/assets/${gameContract}/${tokenId.toNumber()}`
+                );
+            }
+        };
+
         if (gameContract) {
             getCharacters();
+
+            //Configure NFT minted listener
+            gameContract.on("CharacterNFTMinted", onCharacterMint);
         }
+
+        return () => {
+            // Cleanup listener on dismount
+            if (gameContract) {
+                gameContract.off("CharacterNFTMinted", onCharacterMint);
+            }
+        };
     }, [gameContract]);
 
     const renderCharacters = () =>
@@ -62,8 +100,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
                 <button
                     type="button"
                     className="character-mint-button"
-                // onClick={mintCharacterNFTAction(index)} 
-                // você deve descomentar essa linha depois que criar a função mintCharacterNFTAction
+                    onClick={mintCharacterNFTAction(index)}
                 >{`Mintar ${character.name}`}</button>
             </div>
         ));
