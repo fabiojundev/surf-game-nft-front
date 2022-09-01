@@ -76,7 +76,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
                 setCharacterNFT(transformCharacterData(characterNFT));
 
                 alert(
-                    `Seu NFT está pronto -- veja aqui: https://testnets.opensea.io/assets/${gameContract}/${tokenId.toNumber()}`
+                    `Seu NFT está pronto -- veja aqui: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
                 );
             }
         };

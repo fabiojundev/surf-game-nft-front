@@ -8,8 +8,9 @@ import LoadingIndicator from "../LoadingIndicator";
 const Arena = ({ characterNFT, setCharacterNFT }) => {
     const [gameContract, setGameContract] = useState(null);
     const [boss, setBoss] = useState(null);
-
     const [attackState, setAttackState] = useState("");
+    const [showToast, setShowToast] = useState(false);
+    const [attackDamage, setAttackDamage] = useState(0);
 
     const runAttackAction = async () => {
         try {
@@ -62,12 +63,18 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
             * Atualiza o hp do boss e do player
             */
             setBoss((prevState) => {
+                setAttackDamage( prevState?.waves - bossHp);
                 return { ...prevState, waves: bossHp };
             });
 
             setCharacterNFT((prevState) => {
                 return { ...prevState, hp: playerHp };
             });
+
+            setShowToast(true);
+            setTimeout(() => {
+                setShowToast(false);
+            }, 5000);
         };
 
         if (gameContract) {
@@ -84,6 +91,12 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
 
     return (
         <div className="arena-container">
+            {boss && characterNFT && (
+                <div id="toast" className={showToast ? "show" : ""}>
+                    <div id="desc">{`💥 ${boss.name} tomou ${attackDamage} de dano!`}</div>
+                </div>
+            )}
+
             {boss && (
                 <div className="boss-container">
                     <div className={`boss-content ${attackState}`}>
