@@ -5,6 +5,7 @@ import SelectCharacter from "./Components/SelectCharacter";
 import { CONTRACT_ADDRESS, transformCharacterData } from "./constants";
 import { ethers } from "ethers";
 import mySurfGame from "./utils/MySurfGame.json";
+import Arena from './Components/Arena';
 
 // Constants
 const TWITTER_HANDLE = "web3dev_"
@@ -60,11 +61,13 @@ const App = () => {
           </button>
         </div>
       );
-      /*
-       * cenário #2
-       */
+      //Allow user to mint a surfer NFT 
     } else if (currentAccount && !characterNFT) {
       return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+    }
+    // Show arena for users with NFT
+    else if (currentAccount && characterNFT) {
+      return <Arena characterNFT={characterNFT} />;
     }
   };
 
@@ -121,7 +124,7 @@ const App = () => {
       );
 
       const txn = await gameContract.checkIfUserHasNFT();
-      console.log("txn",txn);
+      console.log("txn", txn);
       if (txn.name) {
         console.log("Usuário tem um personagem NFT");
         setCharacterNFT(transformCharacterData(txn));

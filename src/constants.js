@@ -12,4 +12,14 @@ const transformCharacterData = (characterData) => {
     };
 };
 
-export { CONTRACT_ADDRESS, transformCharacterData };
+const transformBossData = (characterData) => {
+    return {
+        name: characterData.name,
+        imageURI: characterData.imageURI,
+        waves: characterData.waves.toNumber(),
+        maxWaves: characterData.maxWaves.toNumber(),
+        attackDamage: characterData.attackDamage.toNumber(),
+    };
+};
+
+export { CONTRACT_ADDRESS, transformCharacterData, transformBossData };
