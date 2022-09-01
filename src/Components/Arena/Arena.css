@@ -104,6 +104,11 @@
   padding-bottom: 50px; 
 }
 
+
+.players-container .wallet-address {
+  font-size: .7em;
+}
+
 .player .image-content img {
   width: 250px;
   height: 300px;

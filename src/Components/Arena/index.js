@@ -153,7 +153,8 @@ const Arena = ({ characterNFT, setCharacterNFT, allSurfersNFTs, setAllSurfersNFT
                                 <div className="stats">
                                     <h4>{`🌊  Manobras: ${surfer.maneuver}, Tubos: ${surfer.tubeRiding}, Aéreos: ${surfer.aerial}`}</h4>
                                     <h4>{`Score: ${surfer.score}`}</h4>
-                                    <h4>{`Carteira: ${surfer.owner}`}</h4>
+                                    <h4>Carteira:</h4>
+                                    <p class="wallet-address">{surfer.owner}</p>
                                 </div>
                             </div>
                         </div>
