@@ -157,14 +157,14 @@
 }
 
 /* Effects */
-.boss-container .attacking {
+.boss-container .surfing {
   animation: shake 1.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
 }
 
-.boss-container .hit {
+.boss-container .scored {
   animation: hit-bounce 1s ease;
 }
 

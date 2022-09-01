@@ -4,11 +4,27 @@ import { CONTRACT_ADDRESS, transformCharacterData, transformBossData } from "../
 import mySurfGame from "../../utils/MySurfGame.json";
 import "./Arena.css";
 
-const Arena = ({ characterNFT }) => {
+const Arena = ({ characterNFT, setCharacterNFT }) => {
     const [gameContract, setGameContract] = useState(null);
     const [boss, setBoss] = useState(null);
 
-    const runAttackAction = async () => { };
+    const [attackState, setAttackState] = useState("");
+
+    const runAttackAction = async () => {
+        try {
+            if (gameContract) {
+                setAttackState("surfing");
+                console.log("Pegando a onda...");
+                const attackTxn = await gameContract.attackBoss();
+                await attackTxn.wait();
+                console.log("surfTxn:", attackTxn);
+                setAttackState("scored");
+            }
+        } catch (error) {
+            console.error("Erro ao dropar a onda:", error);
+            setAttackState("");
+        }
+    };
 
     useEffect(() => {
         const { ethereum } = window;
@@ -35,8 +51,33 @@ const Arena = ({ characterNFT }) => {
             setBoss(transformBossData(bossTxn));
         };
 
+        const onAttackComplete = (newBossHp, newPlayerHp) => {
+            const bossHp = newBossHp.toNumber();
+            const playerHp = newPlayerHp.toNumber();
+
+            console.log(`AttackComplete: Boss Hp: ${bossHp} Player Hp: ${playerHp}`);
+
+            /*
+            * Atualiza o hp do boss e do player
+            */
+            setBoss((prevState) => {
+                return { ...prevState, waves: bossHp };
+            });
+
+            setCharacterNFT((prevState) => {
+                return { ...prevState, hp: playerHp };
+            });
+        };
+
         if (gameContract) {
             fetchBoss();
+            gameContract.on('AttackComplete', onAttackComplete);
+        }
+
+        return () => {
+            if (gameContract) {
+                gameContract.off('AttackComplete', onAttackComplete);
+            }
         }
     }, [gameContract]);
 
@@ -44,7 +85,7 @@ const Arena = ({ characterNFT }) => {
         <div className="arena-container">
             {boss && (
                 <div className="boss-container">
-                    <div className={`boss-content`}>
+                    <div className={`boss-content ${attackState}`}>
                         <h2>🔥 {boss.name} 🔥</h2>
                         <div className="image-content">
                             <img src={boss.imageURI} alt={`Boss ${boss.name}`} />

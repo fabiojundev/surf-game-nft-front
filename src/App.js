@@ -51,7 +51,10 @@ const App = () => {
       return (
         <div className="connect-wallet-container">
           <video autoPlay loop muted controls width="550" height="550">
-            <source src="https://thumbs.gfycat.com/LankyPotableAiredale-mobile.mp4" type="video/mp4"></source>
+            <source 
+              src="https://thumbs.gfycat.com/LankyPotableAiredale-mobile.mp4" 
+              type="video/mp4"
+            />
           </video>
           <button
             className="cta-button connect-wallet-button"
@@ -67,7 +70,10 @@ const App = () => {
     }
     // Show arena for users with NFT
     else if (currentAccount && characterNFT) {
-      return <Arena characterNFT={characterNFT} />;
+      return <Arena
+        characterNFT={characterNFT}
+        setCharacterNFT={setCharacterNFT}
+      />
     }
   };
 
