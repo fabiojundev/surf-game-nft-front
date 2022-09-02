@@ -101,7 +101,8 @@
 }
 
 .players-container .stats {
-  padding-bottom: 50px; 
+  font-size: .9em;
+  padding-bottom: 50px;
 }
 
 .player .image-content img {

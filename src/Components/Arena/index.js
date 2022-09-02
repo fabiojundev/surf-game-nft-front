@@ -151,13 +151,13 @@ const Arena = ({ characterNFT, setCharacterNFT, allSurfersNFTs, setAllSurfersNFT
                                 </div>
                             </div>
                             <div className="stats">
-                                <p>{`Manobras: ${surfer.maneuver}`}</p>
-                                <p>{`Tubos: ${surfer.tubeRiding}`}</p>
-                                <p>{`Aéreos: ${surfer.aerial}`}</p>
-                                <p>{`Score: ${surfer.score}`}</p>
+                                <p>{`Aéreo: ${surfer.aerial}`}</p>
+                                <p>{`Tubo: ${surfer.tubeRiding}`}</p>
+                                <p>{`Manobra: ${surfer.maneuver}`}</p>
+                                <p>{`Pontos: ${surfer.score}`}</p>
                                 <p>
-                                    {`Carteira: ${surfer.owner.substring(0,5)}
-                                        ...${surfer.owner.substring(surfer.owner.length -4,surfer.owner.length)}`
+                                    {`Carteira: ${surfer.owner.substring(0, 5)}
+                                        ...${surfer.owner.substring(surfer.owner.length - 4, surfer.owner.length)}`
                                     }
                                 </p>
                             </div>
