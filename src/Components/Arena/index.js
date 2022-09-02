@@ -98,7 +98,7 @@ const Arena = ({ characterNFT, setCharacterNFT, allSurfersNFTs, setAllSurfersNFT
     //Order surfers, putting the current surfer as the first one.
     const allSurfers = [
         characterNFT,
-        ...allSurfersNFTs.filter( surfer => characterNFT.owner !== surfer.owner)
+        ...allSurfersNFTs.filter(surfer => characterNFT.owner !== surfer.owner)
     ];
 
     return (
@@ -136,30 +136,35 @@ const Arena = ({ characterNFT, setCharacterNFT, allSurfersNFTs, setAllSurfersNFT
             )}
             <div className="players-container">
                 {allSurfers?.map((surfer) => (
-                        <div className="player-container" key={surfer.owner}>
-                            <h2>{characterNFT.owner === surfer.owner ? 'Seu Surfista' : 'Equipe'}</h2>
-                            <div className="player">
-                                <div className="image-content">
-                                    <h2>{surfer.name}</h2>
-                                    <img
-                                        src={`https://cloudflare-ipfs.com/ipfs/${surfer.imageURI}`}
-                                        alt={`Character ${surfer.name}`}
-                                    />
-                                    <div className="health-bar">
-                                        <progress value={surfer.hp} max={surfer.maxHp} />
-                                        <p>{`${surfer.hp} / ${surfer.maxHp} HP`}</p>
-                                    </div>
-                                </div>
-                                <div className="stats">
-                                    <h4>{`🌊  Manobras: ${surfer.maneuver}, Tubos: ${surfer.tubeRiding}, Aéreos: ${surfer.aerial}`}</h4>
-                                    <h4>{`Score: ${surfer.score}`}</h4>
-                                    <h4>Carteira:</h4>
-                                    <p class="wallet-address">{surfer.owner}</p>
+                    <div className="player-container" key={surfer.owner}>
+                        <h2>{characterNFT.owner === surfer.owner ? 'Seu Surfista' : 'Equipe'}</h2>
+                        <div className="player">
+                            <div className="image-content">
+                                <h2>{surfer.name}</h2>
+                                <img
+                                    src={`https://cloudflare-ipfs.com/ipfs/${surfer.imageURI}`}
+                                    alt={`Character ${surfer.name}`}
+                                />
+                                <div className="health-bar">
+                                    <progress value={surfer.hp} max={surfer.maxHp} />
+                                    <p>{`${surfer.hp} / ${surfer.maxHp} HP`}</p>
                                 </div>
                             </div>
+                            <div className="stats">
+                                <p>{`Manobras: ${surfer.maneuver}`}</p>
+                                <p>{`Tubos: ${surfer.tubeRiding}`}</p>
+                                <p>{`Aéreos: ${surfer.aerial}`}</p>
+                                <p>{`Score: ${surfer.score}`}</p>
+                                <p>
+                                    {`Carteira: ${surfer.owner.substring(0,5)}
+                                        ...${surfer.owner.substring(surfer.owner.length -4,surfer.owner.length)}`
+                                    }
+                                </p>
+                            </div>
                         </div>
+                    </div>
 
-                    ))
+                ))
                 }
             </div>
         </div>

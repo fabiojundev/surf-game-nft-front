@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import twitterLogo from "./assets/twitter-logo.svg"
 import "./App.css"
 import SelectCharacter from "./Components/SelectCharacter";
 import { CONTRACT_ADDRESS, transformCharacterData } from "./constants";
@@ -7,10 +6,6 @@ import { ethers } from "ethers";
 import mySurfGame from "./utils/MySurfGame.json";
 import Arena from './Components/Arena';
 import LoadingIndicator from "./Components/LoadingIndicator";
-
-// Constants
-const TWITTER_HANDLE = "web3dev_"
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -180,15 +175,6 @@ const App = () => {
           <p className="header gradient-text">🌊 Surfe no Metaverso 🌊</p>
           <p className="sub-text">Junte-se a mim para surfar as ondas do Metaverso!</p>
           {renderContent()}
-        </div>
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`construído por @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
